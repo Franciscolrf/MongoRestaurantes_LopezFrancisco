@@ -12,17 +12,17 @@ import org.bson.types.ObjectId;
  *
  * @author ID145
  */
-public class Restaurantes {
+public class Restaurante {
     private ObjectId id;
     private String nombre;
     private int rating;
     private Date fecha;
     private String categorias[];
 
-    public Restaurantes() {
+    public Restaurante() {
     }
 
-    public Restaurantes(ObjectId id, String nombre, int rating, Date fecha, String categorias[]) {
+    public Restaurante(ObjectId id, String nombre, int rating, Date fecha, String categorias[]) {
         this.id = id;
         this.nombre = nombre;
         this.rating = rating;
@@ -31,7 +31,7 @@ public class Restaurantes {
 
     }
 
-    public Restaurantes(String nombre, int rating, Date fecha, String categorias[]) {
+    public Restaurante(String nombre, int rating, Date fecha, String categorias[]) {
         this.nombre = nombre;
         this.rating = rating;
         this.fecha = fecha;
