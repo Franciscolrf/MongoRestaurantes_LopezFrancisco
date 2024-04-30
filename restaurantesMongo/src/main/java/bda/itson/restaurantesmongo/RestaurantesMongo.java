@@ -21,10 +21,10 @@ public class RestaurantesMongo {
         Restaurante r1 = new Restaurante("Sushilito", 5, new Date(), new String[]{"Sushi", "Japonesa"});
         Restaurante r2 = new Restaurante("Pizza Hut", 4, new Date(), new String[]{"Pizza", "Italiana"});
         Restaurante r3 = new Restaurante("McDonald's", 3, new Date(), new String[]{"Hamburguesas", "Rápida"});
-
-        ArrayList<Restaurante> restaurantes = new ArrayList<>();
         DAORestaurantes dao = new DAORestaurantes();
-        dao.insertarRestaurantes(restaurantes);
+        dao.insertarRestaurante(r1);
+        dao.insertarRestaurante(r2);
+        dao.insertarRestaurante(r3);
 
 
         // Consultar los restaurantes con más de 4 estrellas de rating.

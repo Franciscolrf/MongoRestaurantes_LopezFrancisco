@@ -8,32 +8,30 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import java.util.Arrays;
+import java.util.Date;
 
 import modelos.Restaurante;
 
 public class DAORestaurantes {
-    
+
     MongoClient mongoClient;
     MongoDatabase database;
     MongoCollection<Document> collection;
 
     public DAORestaurantes() {
         mongoClient = new MongoClient();
-        database = mongoClient.getDatabase("as20");
-        collection = database.getCollection("Restaurantes");
+        database = mongoClient.getDatabase("asigrest");
+        collection = database.getCollection("restaurantes");
     }
 
     public void insertarRestaurante(Restaurante restaurante) {
-        Document doc = new Document(
-            "nombre", restaurante.getNombre()
-        ).append(
-            "rating", restaurante.getRating()
-        ).append(
-            "fecha", restaurante.getFecha()
-        ).append(
-            "categorias", restaurante.getCategorias()
-        );
-        collection.insertOne(doc);
+        Document docRestaurante = new Document("nombre", restaurante.getNombre())
+                .append("rating", restaurante.getRating())
+                .append("fecha", restaurante.getFecha())
+                .append("categorias", Arrays.asList(restaurante.getCategorias()));
+
+        collection.insertOne(docRestaurante);
     }
 
     public void insertarRestaurantes(ArrayList<Restaurante> restaurantes) {
@@ -41,10 +39,10 @@ public class DAORestaurantes {
             insertarRestaurante(restaurante);
         }
     }
-    
+
     public ArrayList<Restaurante> obtenerRestaurantes() {
         ArrayList<Restaurante> restaurantes = new ArrayList<>();
-        MongoCursor <Document> cursor = collection.find().iterator();
+        MongoCursor<Document> cursor = collection.find().iterator();
         try {
             while (cursor.hasNext()) {
                 Document doc = cursor.next();
@@ -67,12 +65,12 @@ public class DAORestaurantes {
         doc.append("nombre", nombre);
         collection.deleteOne(doc);
     }
-    
-    public ArrayList<Restaurante> consultarRestaurantesRating (int rating){
+
+    public ArrayList<Restaurante> consultarRestaurantesRating(int rating) {
         ArrayList<Restaurante> restaurantes = new ArrayList<>();
         Document doc = new Document();
         doc.append("rating", rating);
-        MongoCursor <Document> cursor = collection.find(doc).iterator();
+        MongoCursor<Document> cursor = collection.find(doc).iterator();
         try {
             while (cursor.hasNext()) {
                 Document doc2 = cursor.next();
@@ -91,11 +89,11 @@ public class DAORestaurantes {
 
     }
 
-    public ArrayList<Restaurante> consultarRestauranteMenorQueRating (int rating){
+    public ArrayList<Restaurante> consultarRestauranteMenorQueRating(int rating) {
         ArrayList<Restaurante> restaurantes = new ArrayList<>();
         Document doc = new Document();
         doc.append("rating", new Document("$lt", rating));
-        MongoCursor <Document> cursor = collection.find(doc).iterator();
+        MongoCursor<Document> cursor = collection.find(doc).iterator();
         try {
             while (cursor.hasNext()) {
                 Document doc2 = cursor.next();
@@ -114,11 +112,11 @@ public class DAORestaurantes {
 
     }
 
-    public ArrayList<Restaurante> consultarRestauranteMayorQueRating (int rating){
+    public ArrayList<Restaurante> consultarRestauranteMayorQueRating(int rating) {
         ArrayList<Restaurante> restaurantes = new ArrayList<>();
         Document doc = new Document();
         doc.append("rating", new Document("$gt", rating));
-        MongoCursor <Document> cursor = collection.find(doc).iterator();
+        MongoCursor<Document> cursor = collection.find(doc).iterator();
         try {
             while (cursor.hasNext()) {
                 Document doc2 = cursor.next();
@@ -137,11 +135,11 @@ public class DAORestaurantes {
 
     }
 
-    public ArrayList<Restaurante> consultarRestauranteMenorIgualQueRating (int rating){
+    public ArrayList<Restaurante> consultarRestauranteMenorIgualQueRating(int rating) {
         ArrayList<Restaurante> restaurantes = new ArrayList<>();
         Document doc = new Document();
         doc.append("rating", new Document("$lte", rating));
-        MongoCursor <Document> cursor = collection.find(doc).iterator();
+        MongoCursor<Document> cursor = collection.find(doc).iterator();
         try {
             while (cursor.hasNext()) {
                 Document doc2 = cursor.next();
@@ -160,11 +158,11 @@ public class DAORestaurantes {
 
     }
 
-    public ArrayList<Restaurante> consultarRestauranteMayorIgualQueRating (int rating){
+    public ArrayList<Restaurante> consultarRestauranteMayorIgualQueRating(int rating) {
         ArrayList<Restaurante> restaurantes = new ArrayList<>();
         Document doc = new Document();
         doc.append("rating", new Document("$gte", rating));
-        MongoCursor <Document> cursor = collection.find(doc).iterator();
+        MongoCursor<Document> cursor = collection.find(doc).iterator();
         try {
             while (cursor.hasNext()) {
                 Document doc2 = cursor.next();
