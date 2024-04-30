@@ -1,6 +1,5 @@
 package datos;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import org.bson.Document;
@@ -21,15 +20,19 @@ public class DAORestaurantes {
     public DAORestaurantes() {
         mongoClient = new MongoClient();
         database = mongoClient.getDatabase("as20");
-        collection = database.getCollection("Restaruantes");
+        collection = database.getCollection("Restaurantes");
     }
 
     public void insertarRestaurante(Restaurante restaurante) {
-        Document doc = new Document();
-        doc.append("nombre", restaurante.getNombre());
-        doc.append("rating", restaurante.getRating());
-        doc.append("fecha", restaurante.getFecha());
-        doc.append("categorias", restaurante.getCategorias());
+        Document doc = new Document(
+            "nombre", restaurante.getNombre()
+        ).append(
+            "rating", restaurante.getRating()
+        ).append(
+            "fecha", restaurante.getFecha()
+        ).append(
+            "categorias", restaurante.getCategorias()
+        );
         collection.insertOne(doc);
     }
 
