@@ -191,4 +191,26 @@ public class DAORestaurantes {
         doc2.append("categorias", restaurante.getCategorias());
         collection.updateOne(doc, new Document("$set", doc2));
     }
+
+    public ArrayList<Restaurante> consultarRestauranteCategoria (String categoria) {
+        ArrayList<Restaurante> restaurantes = new ArrayList<>();
+        Document doc = new Document();
+        doc.append("categorias", categoria);
+        MongoCursor<Document> cursor = collection.find(doc).iterator();
+        try {
+            while (cursor.hasNext()) {
+                Document doc2 = cursor.next();
+                Restaurante restaurante = new Restaurante();
+                restaurante.setNombre(doc2.getString("nombre"));
+                restaurante.setRating(doc2.getInteger("rating"));
+                restaurante.setFecha(doc2.getDate("fecha"));
+                ArrayList<String> categorias = (ArrayList<String>) doc2.get("categorias");
+                restaurante.setCategorias(categorias.toArray(new String[categorias.size()]));
+                restaurantes.add(restaurante);
+            }
+        } finally {
+            cursor.close();
+        }
+        return restaurantes;
+    }
 }
