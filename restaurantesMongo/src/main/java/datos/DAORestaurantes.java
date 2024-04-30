@@ -1,13 +1,18 @@
 package datos;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+
 import java.util.Arrays;
 import java.util.Date;
 
@@ -192,7 +197,15 @@ public class DAORestaurantes {
         collection.updateOne(doc, new Document("$set", doc2));
     }
 
-    public ArrayList<Restaurante> consultarRestauranteCategoria (String categoria) {
+    public void agregarCategoriaExtra(String nombreRestaurante, String nuevaCategoria) {
+        Document filtro = new Document("nombre", nombreRestaurante);
+
+        Document actualizacion = new Document("$push", new Document("categorias", nuevaCategoria));
+
+        collection.updateOne(filtro, actualizacion);
+    }
+
+    public ArrayList<Restaurante> consultarRestauranteCategoria(String categoria) {
         ArrayList<Restaurante> restaurantes = new ArrayList<>();
         Document doc = new Document();
         doc.append("categorias", categoria);
@@ -212,5 +225,41 @@ public class DAORestaurantes {
             cursor.close();
         }
         return restaurantes;
+    }
+
+    public ArrayList<Restaurante> consultarRestauranteNombre(String nombre) {
+        ArrayList<Restaurante> restaurantes = new ArrayList<>();
+        Document query = new Document("nombre", new Document("$regex", nombre).append("$options", "i"));
+
+        MongoCursor<Document> cursor = collection.find(query).iterator();
+
+        try {
+            while (cursor.hasNext()) {
+                Document doc = cursor.next();
+                Restaurante restaurante = new Restaurante();
+                restaurante.setNombre(doc.getString("nombre"));
+                restaurante.setRating(doc.getInteger("rating"));
+                restaurante.setFecha(doc.getDate("fecha"));
+                ArrayList<String> categorias = (ArrayList<String>) doc.get("categorias");
+                restaurante.setCategorias(categorias.toArray(new String[categorias.size()]));
+                restaurantes.add(restaurante);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return restaurantes;
+    }
+
+    public void eliminarRestauranteId(ObjectId id) {
+        Bson filtro = Filters.eq("_id", id);
+
+        collection.deleteOne(filtro);
+    }
+
+    public void eliminarRestaurantes(ArrayList<Restaurante> restaurantes) {
+        for (Restaurante restaurante : restaurantes) {
+            eliminarRestaurante(restaurante.getNombre());
+        }
     }
 }

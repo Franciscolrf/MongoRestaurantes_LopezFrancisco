@@ -4,8 +4,11 @@
 
 package bda.itson.restaurantesmongo;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
+
+import org.bson.types.ObjectId;
 
 import datos.DAORestaurantes;
 import modelos.Restaurante;
@@ -39,13 +42,34 @@ public class RestaurantesMongo {
 
 
         // Consultar los restaurantes que incluyan la categoría pizza.
+        /* 
         for (Restaurante restaurante : dao.consultarRestauranteCategoria("Pizza")) {
             System.out.println(restaurante);
         }
+        */
 
         // Consultar los restaurantes que incluyan sushi en su nombre.
+        /* 
+        for (Restaurante restaurante : dao.consultarRestauranteNombre("Sushi")) {
+            System.out.println(restaurante);
+        }
+        */
+
         // Agregar una categoría extra al restaurant sushilito.
+
+        /* 
+        dao.agregarCategoriaExtra("Sushilito", "Rapida");
+        */
+
         // Eliminar un restaurante por su identificador.
-        // Eliminar los restaurantes con 3 estrellas o menos.
+        /*
+        dao.eliminarRestauranteId(new ObjectId("6630a53895061f8424c63080"));
+        */
+
+        //  Eliminar los restaurantes con 3 estrellas o menos.
+
+        ArrayList<Restaurante> restaurantes = dao.consultarRestauranteMenorIgualQueRating(3);
+        dao.eliminarRestaurantes(restaurantes);
+
     }
 }
